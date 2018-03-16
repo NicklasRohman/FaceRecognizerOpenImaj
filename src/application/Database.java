@@ -86,9 +86,9 @@ public class Database {
 
 	}
 
-	public ArrayList<String> getUser(int inCode) throws SQLException {
+	public List<String> getUser(int inCode) throws SQLException {
 
-		ArrayList<String> user = new ArrayList<String>();
+		List<String> user = new ArrayList<String>();
 
 		try {
 

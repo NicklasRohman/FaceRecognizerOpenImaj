@@ -23,13 +23,13 @@ public class TheFaceDetector extends JFrame implements Runnable, WebcamPanel.Pai
 
 	Database database = Database.getInstance();
 	FaceRecognizer faceRecognizer = FaceRecognizer.getInstance();
-	
+
 	private static final Executor EXECUTOR = Executors.newSingleThreadExecutor();
 	private static final HaarCascadeDetector detector = new HaarCascadeDetector();
 	private static final Stroke STROKE = new BasicStroke(4.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f,
 			new float[] { 5.0f }, 0.0f);
 
-	private Webcam webcam = Webcam.getDefault();
+	private static Webcam webcam = Webcam.getDefault();
 	private WebcamPanel.Painter painter = null;
 	private List<DetectedFace> faces = null;
 	private static final long serialVersionUID = 1L;
@@ -38,20 +38,21 @@ public class TheFaceDetector extends JFrame implements Runnable, WebcamPanel.Pai
 	private int code;
 	private int reg;
 	private int age;
-	
-	ArrayList<String> user;
-	int recogniseCode;
+
+	public List<String> user;
+	int recogniseCode = 1;
 	private boolean isRecFace = false;
 
 	private String fname; // first name
 	private String Lname; // last name
 	private String sec; // section
 	private String name;
-	private boolean saveFace = false;
+	boolean fillUserList = false;
 
 	private static TheFaceDetector instance;
 
-	private TheFaceDetector() {	}
+	private TheFaceDetector() {
+	}
 
 	public static TheFaceDetector getInstace() {
 		if (instance == null) {
@@ -68,7 +69,7 @@ public class TheFaceDetector extends JFrame implements Runnable, WebcamPanel.Pai
 				return;
 			}
 			faces = detector.detectFaces(ImageUtilities.createFImage(webcam.getImage()));
-			
+
 		}
 	}
 
@@ -104,25 +105,29 @@ public class TheFaceDetector extends JFrame implements Runnable, WebcamPanel.Pai
 			g2.setStroke(STROKE);
 			g2.setColor(Color.GREEN);
 			g2.drawRect(x, y, w, h);
-		
+
 			if (isRecFace()) {
-				//this.recogniseCode = faceRecognizer.recognize(temp);
 
-				// getting recognised user from the database
-				user = new ArrayList<String>();
-				
-				try {
-					user = database.getUser(this.recogniseCode);
-				} catch (SQLException e) {
-					e.printStackTrace();
+				// this.recogniseCode = faceRecognizer.recognize(temp);
+				if (!fillUserList) {
+					// getting recognised user from the database
+					user = new ArrayList<String>();
+
+					try {
+						user = database.getUser(this.recogniseCode);
+						fillUserList = true;
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 				}
-
 				// printing recognised person name into the
 				// frame
-				g2.setColor(Color.WHITE);
+				g2.setColor(Color.RED);
 				g2.setFont(new Font("Arial Black", Font.BOLD, 20));
-				String names = user.get(1) + " " + user.get(2);
-				g2.drawString(names, x,y);
+				String names = user.get(1);
+				// String names = user.get(1) + " " + user.get(2);
+				g2.drawString(names, x, y);
+				repaint();
 			}
 		}
 	}
