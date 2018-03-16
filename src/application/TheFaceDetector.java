@@ -51,9 +51,6 @@ public class TheFaceDetector extends JFrame implements Runnable, WebcamPanel.Pai
 
 	private static TheFaceDetector instance;
 
-	private TheFaceDetector() {
-	}
-
 	public static TheFaceDetector getInstace() {
 		if (instance == null) {
 			instance = new TheFaceDetector();

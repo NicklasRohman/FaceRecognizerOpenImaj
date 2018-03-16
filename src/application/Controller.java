@@ -21,7 +21,6 @@ public class Controller {
 
 	Database database = Database.getInstance(); // Creating Database object
 	TheFaceDetector theFaceDetector = TheFaceDetector.getInstace();
-	ArrayList<String> user = new ArrayList<String>();
 	GuiClass gui = GuiClass.getInstance();
 	// Mention The file location path where the face will be saved & retrieved
 	final File FOLDER = new File("faces");
@@ -49,11 +48,6 @@ public class Controller {
 		if (isDBready) {
 			gui.getRecogniseBtn().setEnabled(true);
 			gui.getSaveBtn().setEnabled(true);
-		}
-
-		if (!gui.getStopRecogniseBtn().isEnabled()) {
-			gui.getStopRecogniseBtn().setEnabled(true);
-			;
 		}
 
 		fillListOfFaceImages();
